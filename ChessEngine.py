@@ -24,6 +24,17 @@ class GameState():
         self.whiteToMove = not self.whiteToMove
 
 
+    # this will undo the last move made
+    def undoMove(self):
+        if len(self.moveLog) != 0: # check if there is a move to undo.
+            last_move = self.moveLog.pop()
+            self.board[last_move.endRow][last_move.endCol] = last_move.pieceCaptured
+            self.board[last_move.startRow][last_move.startCol] = last_move.pieceMoved
+            self.whiteToMove = not self.whiteToMove
+
+
+
+
 
 class Move():
     ranksToRows = {"1": 7 , "2": 6 , "3": 5 , "4": 4, "5": 3 , "6": 2 , "7": 1 , "8": 0}
@@ -32,7 +43,7 @@ class Move():
 
     filesToCols = {"a": 0 , "b": 1 , "c": 2 , "d": 3 , "e": 4 , "f": 5 , "g": 6 , "h": 7}
 
-    colsToFiles = {v : k for v , k in filesToCols.items()}
+    colsToFiles = {v : k for k , v in filesToCols.items()}
 
 
     def __init__(self , startSq , endSq , board):
@@ -45,10 +56,10 @@ class Move():
 
 
     def getChessNotaion(self):
-        return self.getRankFile(self.startRow , self.startCol) + self.getRankFile(self.endRow , self.endCol)
+        return self.getRankFile(self.startRow , self.startCol) + " " +  self.getRankFile(self.endRow , self.endCol)
 
 
 
 
     def getRankFile(self , r , c):
-        return self.rowsToRanks(r) + self.colsToFiles(c)
+        return self.colsToFiles[c] + self.rowsToRanks[r]
