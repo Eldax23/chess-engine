@@ -33,6 +33,41 @@ class GameState():
             self.whiteToMove = not self.whiteToMove
 
 
+    # Get All Valid Moves Considering Checks
+    def getValidMoves(self):
+        return self.getAllPossibleMoves() # for now we won't worry about checks
+
+
+    # Get All Valid Moves NOT Considering Checks
+    def getAllPossibleMoves(self):
+        moves = [Move((6,4) , (4,4) , self.board)]
+        for r in range(len(self.board)):
+            for c in range(len(self.board[r])):
+                curr_sq = self.board[r][c]
+                turn = curr_sq[0] # --> whether its w or b
+                if (turn == 'w' and self.whiteToMove) or (turn == 'b' and not self.whiteToMove):
+                    piece = curr_sq[1]
+                    if piece == 'p':
+                        self.getPawnMoves(r , c , moves)
+                    elif piece == 'R':
+                        self.getRookMoves(r , c , moves)
+
+        return moves
+
+    # get all the moves of the pawn located at (r , c) and add it to moves list
+    def getPawnMoves(self , r , c , moves):
+        pass
+
+
+    # get all the moves of the rook located at (r , c) and add it to moves list
+    def getRookMoves(self , r , c , moves):
+        pass
+
+
+
+
+
+
 
 
 
@@ -53,6 +88,12 @@ class Move():
         self.endCol = endSq[1]
         self.pieceMoved = board[self.startRow][self.startCol]
         self.pieceCaptured = board[self.endRow][self.endCol]
+        self.moveId = self.startRow * 1000 + self.startCol  * 1000 + self.endRow * 1000 + self.startCol * 1000
+
+    def __eq__(self, other): # overriding eq function
+        if isinstance(other , Move):
+            return self.moveId == other.moveId
+        return False
 
 
     def getChessNotaion(self):

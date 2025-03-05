@@ -34,6 +34,8 @@ def main():
     clock = p.time.Clock()
     screen.fill(p.Color("white"))
     gs = ChessEngine.GameState()
+    validMoves = gs.getValidMoves()
+    moveMade = False # determine when a move is made
     load_board()
     running = True
     sq_selected = () # keep track of last click of user
@@ -56,7 +58,10 @@ def main():
 
                 if len(player_clicks) == 2: #after 2nd click
                     move = ChessEngine.Move(player_clicks[0], player_clicks[1] , gs.board)
-                    gs.makeMove(move)
+                    if move in validMoves:
+                        gs.makeMove(move)
+                        moveMade = True
+
                     print(move.getChessNotaion())
                     sq_selected = ()
                     player_clicks = []
@@ -66,6 +71,10 @@ def main():
                     gs.undoMove()
 
 
+
+        if moveMade:
+            validMoves = gs.getValidMoves()
+            moveMade = False
 
 
         draw_game_state(screen , gs)
