@@ -59,6 +59,8 @@ def main():
                 if len(player_clicks) == 2: #after 2nd click
                     move = ChessEngine.Move(player_clicks[0], player_clicks[1] , gs.board)
                     if move in validMoves:
+                        print(validMoves)
+                        print("this is a valid move")
                         gs.makeMove(move)
                         moveMade = True
 
@@ -69,6 +71,7 @@ def main():
             elif e.type == p.KEYDOWN:
                 if e.key == p.K_z:
                     gs.undoMove()
+                    moveMade = True
 
 
 
