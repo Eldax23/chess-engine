@@ -12,7 +12,7 @@ class GameState():
             ["--" , "--" , "--" , "--",  "--",  "--",  "--",  "--"],
             ["--" , "--" , "--" , "--",  "--",  "--",  "--",  "--"],
             ["--" , "--" , "--" , "bP",  "--",  "--",  "--",  "--"],
-            ["wP" , "wP" , "wP" , "wP" , "wP" , "wP" , "wP" , "wP"],
+            ["--" , "wP" , "wP" , "wP" , "wP" , "wP" , "wP" , "wP"],
             ["wR" , "wN" , "wB" , "wQ" , "wK" , "wB" , "wN" , "wR"],
         ]
         self.whiteToMove = True
@@ -94,7 +94,29 @@ class GameState():
 
     # get all the moves of the rook located at (r , c) and add it to moves list
     def getRookMoves(self , r , c , moves):
-        pass
+        directions = ((-1 , 0) , (1 , 0) , (0 , -1) , (0 , 1)) # up - down - left - right
+        enemyColor = "b" if self.whiteToMove else "w"
+        print(f"moves before {moves}")
+        for d in directions:
+            for i in range(1 , 8):
+                endRow = r + i * d[0]
+                endCol = c + i * d[1]
+
+                if 0 <= endRow < 8 and 0 <= endCol < 8:
+                    curr = self.board[endRow][endCol]
+                    if curr == "--": # there is no piece to capture so we just move the rook.
+                        moves.append(Move((r , c) , (endRow , endCol) , self.board))
+
+                    elif curr[0] == enemyColor: # there is a piece of enemy to capture so we stop the possible moves in the diagonal.
+                        moves.append(Move((r , c) , (endRow , endCol) , self.board))
+                        break
+
+                    else: # there is a piece of the same color , so we must stop the moves here too.
+                        break
+                else: # out of range indexes
+                    break
+        print(f"moves after: {moves}")
+
 
 
 
