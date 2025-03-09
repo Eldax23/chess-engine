@@ -122,6 +122,28 @@ class GameState():
 
     # get all the moves of the Knight located at (r , c) and add it to moves list
     def getKnightMoves(self , r , c , moves):
+        directions = ((-2, -1), (-2, 1), (2, -1), (2, 1) , (1 , 2) , (-1 , 2) , (1 , -2) , (-1 , -2))
+        enemyColor = "b" if self.whiteToMove else "w"
+        print(f"moves before {moves}")
+        for d in directions:
+            for i in range(1, 8):
+                endRow = r + i * d[0]
+                endCol = c + i * d[1]
+
+                if 0 <= endRow < 8 and 0 <= endCol < 8:
+                    curr = self.board[endRow][endCol]
+                    if curr == "--":  # there is no piece to capture so we just move the knight.
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+
+                    elif curr[
+                        0] == enemyColor:  # there is a piece of enemy to capture so we stop the possible moves in the diagonal.
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+                        break
+
+                    else:  # there is a piece of the same color , so we must stop the moves here too.
+                        break
+                else:  # out of range indexes
+                    break
         pass
 
     # get all the moves of the Bishop located at (r , c) and add it to moves list
@@ -150,11 +172,23 @@ class GameState():
 
     # get all the moves of the King located at (r , c) and add it to moves list
     def getKingMoves(self , r , c , moves):
-        pass
+        directions = ((1, 0), (0, 1), (-1, 0), (0, -1) , (-1 , -1) , (1 , 1) , (-1 , 1) , (1 , -1))  # we are moving diagonally so both (r , c) should change
+        friendlyColor = "w" if self.whiteToMove else "b"
+        for i in range(len(directions)):
+                endRow = r + directions[i][0]
+                endCol = c + directions[i][1]
+
+                if 0 <= endRow < 8 and 0 <= endCol < 8:
+                    curr = self.board[endRow][endCol]
+                    if curr[0] != friendlyColor:
+                        moves.append(Move((r, c), (endRow, endCol), self.board))
+
+
 
     # get all the moves of the Queen located at (r , c) and add it to moves list
     def getQueenMoves(self , r , c , moves):
-        pass
+        self.getBishopMoves(r , c , moves)
+        self.getRookMoves(r , c , moves)
 
 
 
